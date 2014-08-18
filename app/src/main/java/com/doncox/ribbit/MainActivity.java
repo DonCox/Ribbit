@@ -1,13 +1,18 @@
 package com.doncox.ribbit;
 
-import java.util.Locale;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Date;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.view.Window;
+import android.widget.Toast;
+
 import com.parse.ParseAnalytics;
 import com.parse.ParseUser;
 
@@ -35,13 +42,26 @@ public class MainActivity extends FragmentActivity implements
     public static final int PICK_PHOTO_REQUEST = 2;
     public static final int PICK_VIDEO_REQUEST = 3;
 
+    public static final int MEDIA_TYPE__IMAGE = 4;
+    public static final int MEDIA_TYPE__VIDEO = 5;
+
+    protected Uri mMediaUri;
+
     protected DialogInterface.OnClickListener mDialogListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             switch(which) {
                 case 0: // Take Picture
                     Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+                    mMediaUri = getOutputMediaFileUri(MEDIA_TYPE__IMAGE);
+                    if (mMediaUri == null) {
+                        // Display error message
+                        Toast.makeText(MainActivity.this, R.string.error_external_storage, Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                        startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+                    }
                     break;
                 case 1: // Take Video
                     break;
@@ -49,6 +69,60 @@ public class MainActivity extends FragmentActivity implements
                     break;
                 case 3: // Choose Video
                     break;
+            }
+        }
+
+        private Uri getOutputMediaFileUri(int mediaType) {
+            // To be safe you should check that the SDCard is mounted
+            // using Environment.getExternalStorageState() before doing this
+            if (isExternalStorageAvailable()) {
+                // Get Uri and return it
+                // 1. Get the external storage directory
+                String appName = MainActivity.this.getString(R.string.app_name);
+                File mediaStorageDir = new File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        appName);
+                // 2. Create our own sub-directory
+                if (! mediaStorageDir.exists()) {
+                    if (! mediaStorageDir.mkdirs()){
+                        Log.e(TAG, "Failed to create directory");
+                        return null;
+                    };
+                }
+                // 3. Create a file name
+                // 4. Create the file
+                File mediaFile;
+                Date now = new Date();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(now);
+
+                String path = mediaStorageDir.getPath() + File.separator;
+                if (mediaType == MEDIA_TYPE__IMAGE) {
+                    mediaFile = new File(path + "IMG_" + timeStamp + ".jpg");
+                }
+                else {
+                    if (mediaType == MEDIA_TYPE__VIDEO) {
+                        mediaFile = new File(path + "VID_" + timeStamp + ".mp4");
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                Log.d(TAG, "File " + Uri.fromFile(mediaFile));
+
+                // 5. Return the file's Uri
+                return Uri.fromFile(mediaFile);
+            }
+            else
+                return null;
+        }
+
+        private boolean isExternalStorageAvailable() {
+            String state = Environment.getExternalStorageState();
+            if (state.equals(Environment.MEDIA_MOUNTED)) {
+                return true;
+            }
+            else {
+                return false;
             }
         }
     };
@@ -118,6 +192,21 @@ public class MainActivity extends FragmentActivity implements
             actionBar.addTab(actionBar.newTab()
                     .setText(mSectionsPagerAdapter.getPageTitle(i))
                     .setTabListener(this));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            // Add it to the Gallery
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            mediaScanIntent.setData(mMediaUri);
+            sendBroadcast(mediaScanIntent);
+        }
+        else if (resultCode != RESULT_CANCELED) {
+            Toast.makeText(this, R.string.general_error, Toast.LENGTH_LONG).show();
         }
     }
 
