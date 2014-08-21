@@ -30,13 +30,19 @@
     <string name="error_file_size_too_large">Sorry, file size is too large!</string>
     <string name="error_opening_file">There was a problem with the selected file.</string>
     <string name="error_closing_file">There was a problem closing the selected file.</string>
+    <string name="empty_recipients_list_message">Choose some friends first!</string>
+    <string name="menu_send_label">Send</string>
+    <string name="error_selecting_file">There was an error with the file selected. Please select a different file.</string>
+    <string name="message_sent">Message sent!</string>
+    <string name="error_sending_message">There was and error sending the message! Please try again.</string>
 
-    <string-array
-        name="camera_choices">
+    <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>
         <item>Choose Picture</item>
         <item>Choose Video</item>
     </string-array>
+
+    <string name="title_activity_recipients">Choose Recipients</string>
 
 </resources>

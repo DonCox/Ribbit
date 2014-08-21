@@ -4,15 +4,19 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--<uses-permission android:name="android.permission.CAMERA" />-->
-    <uses-feature android:name="android.hardware.Camera" android:required="true" />
+    <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+    <uses-feature
+        android:name="android.hardware.Camera"
+        android:required="true" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".RibbitApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" android:name="RibbitApplication" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -31,14 +35,23 @@
         <activity
             android:name=".SignUpActivity"
             android:label="@string/title_activity_sign_up"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.doncox.ribbit.LoginActivity" >
+            android:parentActivityName=".LoginActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".EditFriendsActivity"
             android:label="@string/menu_edit_friends_label"
-            android:screenOrientation="portrait"
-            android:parentActivityName="com.doncox.ribbit.EditFriendsActivity" >
+            android:parentActivityName=".EditFriendsActivity"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".RecipientsActivity"
+            android:label="@string/title_activity_recipients"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doncox.ribbit.MainActivity" />
         </activity>
     </application>
 
