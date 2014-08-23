@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.Date;
 import android.app.ActionBar;
@@ -23,9 +24,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 public class MainActivity extends FragmentActivity implements
@@ -226,7 +232,6 @@ public class MainActivity extends FragmentActivity implements
                     mMediaUri = data.getData();
                 }
 
-                Log.i(TAG, "Media URI: " + mMediaUri);
                 if (requestCode == PICK_VIDEO_REQUEST) {
                     // make sure the file is less than 10 MB
                     int fileSize = 0;
@@ -264,8 +269,9 @@ public class MainActivity extends FragmentActivity implements
             }
             Intent recipientsIntent = new Intent(this, RecipientsActivity.class);
             recipientsIntent.setData(mMediaUri);
+
             String fileType;
-            if (resultCode == PICK_PHOTO_REQUEST || resultCode == TAKE_PHOTO_REQUEST) {
+            if (requestCode == PICK_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
                 fileType = ParseConstants.TYPE_IMAGE;
             }
             else {
@@ -289,7 +295,6 @@ public class MainActivity extends FragmentActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        Log.i(TAG, "MainActivity - onCreateOptionsMenu");
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }

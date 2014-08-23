@@ -64,7 +64,6 @@ public class RecipientsActivity extends ListActivity {
     public void onResume() {
         super.onResume();
 
-        Log.i(TAG, "RecipientsActivity - onResume");
         mCurrentUser = ParseUser.getCurrentUser();
         mFriendsRelation = mCurrentUser.getRelation(ParseConstants.KEY_FRIENDS_RELATION);
 
@@ -109,7 +108,6 @@ public class RecipientsActivity extends ListActivity {
      * Set up the {@link android.app.ActionBar}.
      */
     private void setupActionBar() {
-        Log.i(TAG, "RecipientsActivity - setupActionBar");
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true); //Exception here
     }
@@ -117,17 +115,15 @@ public class RecipientsActivity extends ListActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        Log.i(TAG, "RecipientsActivity - onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.recipients, menu);
         mSendMenuItem = menu.getItem(0);
-        Log.i(TAG, "mSendMenuItem: " + mSendMenuItem);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.i(TAG, "RecipientsActivity - onOptionsItemSelected");
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 // This ID represents the Home or Up button. In the case of this
@@ -163,9 +159,6 @@ public class RecipientsActivity extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        Log.i(TAG, "RecipientsActivity - onListItemClick");
-        Log.i(TAG, "RecipientsActivity - mSendMenuItem is " + mSendMenuItem);
-        Log.i(TAG, "RecipientsActivity - Checked Item Count: " + l.getCheckedItemCount());
         mSendMenuItem.setVisible(true);
         if (l.getCheckedItemCount() > 0) {
             mSendMenuItem.setVisible(true);
@@ -176,6 +169,7 @@ public class RecipientsActivity extends ListActivity {
     }
 
     protected ParseObject createMessage() {
+
         ParseObject message = new ParseObject(ParseConstants.CLASS_MESSAGES);
         message.put(ParseConstants.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
         message.put(ParseConstants.KEY_SENDER_NAME, ParseUser.getCurrentUser().getUsername());
