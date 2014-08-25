@@ -12,6 +12,9 @@ import android.widget.ImageView;
 import com.doncox.ribbit.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ViewImageActivity extends Activity {
 
     @Override
@@ -35,6 +38,15 @@ public class ViewImageActivity extends Activity {
         Uri imageUri = getIntent().getData();
         // View the image from the Web using Picasso from Square
         Picasso.with(this).load(imageUri.toString()).into(imageView);
+
+        Timer timer = new Timer();
+        // Schedule the timer for 15 seconds and return to the Inbox
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                finish();
+            }
+        }, 15*1000);
     }
 
     /**
