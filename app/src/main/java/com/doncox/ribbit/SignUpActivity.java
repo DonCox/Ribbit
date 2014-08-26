@@ -1,5 +1,6 @@
 package com.doncox.ribbit;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -27,8 +28,15 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        requestWindowFeature(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_sign_up);
+
+        // Hide the Action Bar
+        // Optional code - getActionBar().hide();
+        // This causes a NullPointerException added the View.SYSTEM.UI.FLAG.FULLSCREEN instead
+        ActionBar actionBar = getActionBar();
+        actionBar.hide();
 
         mUserName = (EditText)findViewById(R.id.usernameField);
         mPassword = (EditText)findViewById(R.id.passwordField);
