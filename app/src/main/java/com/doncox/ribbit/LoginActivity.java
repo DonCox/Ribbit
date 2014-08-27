@@ -31,6 +31,7 @@ public class LoginActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         requestWindowFeature(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_login);
 

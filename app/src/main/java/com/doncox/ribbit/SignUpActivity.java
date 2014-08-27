@@ -22,6 +22,7 @@ public class SignUpActivity extends Activity {
     protected EditText mPassword;
     protected EditText mEmail;
     protected Button mSignUpButton;
+    protected Button mcancelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,19 +30,29 @@ public class SignUpActivity extends Activity {
 
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         requestWindowFeature(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_sign_up);
 
         // Hide the Action Bar
         // Optional code - getActionBar().hide();
         // This causes a NullPointerException added the View.SYSTEM.UI.FLAG.FULLSCREEN instead
-        ActionBar actionBar = getActionBar();
-        actionBar.hide();
+        //ActionBar actionBar = getActionBar();
+        //actionBar.hide();
 
         mUserName = (EditText)findViewById(R.id.usernameField);
         mPassword = (EditText)findViewById(R.id.passwordField);
         mEmail = (EditText)findViewById(R.id.emailField);
         mSignUpButton = (Button)findViewById(R.id.signupButton);
+
+        // If CANCEL button is clicked return to SignUpActivity
+        mcancelButton = (Button)findViewById(R.id.cancelButton);
+        mcancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
 
